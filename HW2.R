@@ -1,6 +1,6 @@
 #Class Activity & HW2
 
-#Chapter 3 Tutorial
+#Chapter 3 Tutorial----
 
 #Only load once (never have to do this again)
 install.packages(c("dplyr", "lubridate")) 
@@ -23,8 +23,8 @@ peaceH = streamH %>%
 
 plot(peaceH$dateF, peaceH$gheight.ft, type="b", pch=19, xlab="Date", ylab="Stage Height (ft)")
 
-#joining two tables
-# join site info and stream heights into a new data frame floods
+#Joining two tables (Answer to Prompt 1)----
+#I am joining the site info and stream heights into a new data frame floods, the type of join in this instance does not make a difference in this data merge.
 floods <- full_join(streamH, siteInfo, by="siteID") 
 
 height.ave = floods %>%
@@ -41,5 +41,20 @@ height.day <- floods %>% # data frame with pipe
 max.cat <- floods %>% #filter floods
   group_by(names) %>% # group by name
   filter(gheight.ft >= major.ft) #observations with height more than or equal to the major flood height
+
+#Parsing date for Floods Data Frame (Answer to Prompt 2)----
+
+
+
+
+
+#Earliest Date Each Stream reached Flood Height (Answer to Prompt 3)----
+flood_cat = floods %>%
+  filter(gheight.ft >= flood.ft) %>%
+  group_by(names) %>%
+  summarise(min_date = min(dateF))
+
+
+
   
 
