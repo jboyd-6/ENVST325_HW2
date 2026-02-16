@@ -59,19 +59,19 @@ flood_cat = floods %>%
 
 fish_creek = floods %>%
   filter(names == "FISHEATING CREEK AT PALMDALE")
-plot(fish_creek$dateF, fish_creek$gheight.ft, type="b", pch=19, xlab="Date", ylab="Stage Height (ft)", main="Fisheating Creek at Palmdale")
+plot(fish_creek$dateF, fish_creek$gheight.ft, type="b", pch=19, xlab="Date", ylab="Stage Height (ft)", main="Fisheating Creek at Palmdale", sub="9-8-2017 to 9-30-2017")
 
 peace_river = floods %>%
   filter(names == "PEACE RIVER AT US 17 AT ZOLFO SPRINGS")
-plot(peace_river$dateF, peace_river$gheight.ft, type="b", pch=19, xlab="Date", ylab="Stage Height (ft)", main="Peace River at US 17 at Zolfo Springs")
+plot(peace_river$dateF, peace_river$gheight.ft, type="b", pch=19, xlab="Date", ylab="Stage Height (ft)", main="Peace River at US 17 at Zolfo Springs", sub="9-8-2017 to 9-30-2017")
 
 sf_river = floods %>%
   filter(names == "SANTA FE RIVER NEAR FORT WHITE")
-plot(sf_river$dateF, sf_river$gheight.ft, type="b", pch=19, xlab="Date", ylab="Stage Height (ft)", main="Santa Fe River Near Fort White")
+plot(sf_river$dateF, sf_river$gheight.ft, type="b", pch=19, xlab="Date", ylab="Stage Height (ft)", main="Santa Fe River Near Fort White", sub="9-8-2017 to 9-30-2017")
 
 white_river = floods %>%
   filter(names == "WITHLACOOCHEE RIVER AT US 301 AT TRILBY")
-plot(white_river$dateF, white_river$gheight.ft, type="b", pch=19, xlab="Date", ylab="Stage Height (ft)", main="Withlacoochee River at US 301 at Trilby")
+plot(white_river$dateF, white_river$gheight.ft, type="b", pch=19, xlab="Date", ylab="Stage Height (ft)", main="Withlacoochee River at US 301 at Trilby", sub="9-8-2017 to 9-30-2017")
 
 #Question 2 - What was the earliest date of occurrence for each flood category in each river? ----
 
@@ -95,6 +95,20 @@ flood_maj = floods %>%
   group_by(names) %>%
   summarise(min_date = min(dateF))
 
+#Time Between Floods----
+
+act_to_flood = floods %>%
+  group_by(names) %>%
+  summarise(time = min(dateF[gheight.ft >= flood.ft]) - min(dateF[gheight.ft >= action.ft]))
+
+flood_to_mod = floods %>%
+  group_by(names) %>%
+  summarise(time = min(dateF[gheight.ft >= moderate.ft]) - min(dateF[gheight.ft >= flood.ft]))
+
+mod_to_maj = floods %>%
+  group_by(names) %>%
+  summarise(time = min(dateF[gheight.ft >= major.ft]) - min(dateF[gheight.ft >= moderate.ft]))
+
 #Question 3 - Which river had the highest stream stage above its listed height in the major flood category? ----
 
 highest_flood = floods %>%
@@ -104,6 +118,22 @@ highest_flood = floods %>%
 
 #Question 4 ----
 
+#select
+help("select")
+flood_name_ht = floods %>% 
+  select(names, gheight.ft)
+
+#ifelse
+help("ifelse")
+floods$flood_true = ifelse(floods$gheight.ft>=floods$flood.ft, "flooding","no flooding")
+
+#hist
+help("hist")
+
+peace_river = floods %>%
+  filter(names == "PEACE RIVER AT US 17 AT ZOLFO SPRINGS")
+
+hist(peace_river$gheight.ft, breaks=10, main="Total Observations of Water Height of Peace River", sub="9-8-2017 to 9-30-2017",xlab="Water Height in FT")
 
 
 
